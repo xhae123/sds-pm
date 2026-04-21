@@ -10,6 +10,10 @@ drafts/
 # Claude Code 로컬 캐시
 .claude/cache/
 
+# Pages 빌드 산출물 (Actions가 매 push마다 생성)
+_site/
+_site_test/
+
 # OS/IDE
 .DS_Store
 Thumbs.db
