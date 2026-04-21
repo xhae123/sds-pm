@@ -1,4 +1,4 @@
-name: Build and deploy bundle to Pages
+name: Build and publish bundle
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -21,15 +21,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build-publish:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Build bundle
         run: bash scripts/build-bundle.sh _site
+
+      # raw.githubusercontent.com 경로로도 즉시 fetch 되도록 루트에 커밋
+      - name: Commit bundle.txt to main
+        run: |
+          cp _site/bundle.txt bundle.txt
+          if git diff --quiet bundle.txt; then
+            echo "bundle.txt unchanged — skipping commit"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add bundle.txt
+            git commit -m "chore(bundle): auto-update [skip ci]"
+            git push
+          fi
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
