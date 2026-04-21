@@ -15,14 +15,16 @@
 
 ### 챗봇 사용자 (ChatGPT, Claude 웹, Gemini 등)
 
-1. 새 대화에서 다음 파일을 순서대로 붙여넣는다.
-   - `CONTEXT.md`
-   - `MEMORY.md`
-   - `course/` 하위 4개 파일
-2. "서데사 팀 AI PM으로 행동하라"고 지시한다.
-3. 질문하거나 과제 PDF를 첨부한다.
+새 대화 맨 처음에 아래 한 줄을 붙인다. 이게 끝이다.
 
-ChatGPT Projects 또는 Claude Projects에 위 묶음을 고정해두면 재붙여넣기가 필요 없다.
+```
+아래 URL을 읽고 서데사 팀 AI PM으로 행동하라.
+https://xhae123.github.io/sds-pm/bundle.txt
+```
+
+이후 질문하거나 과제 PDF를 첨부한다. 번들은 PM이 `git push`할 때마다 GitHub Actions가 자동으로 재빌드하므로, URL은 항상 최신 상태를 가리킨다.
+
+챗봇이 URL 읽기를 거부하면 브라우저로 위 URL을 연 뒤 전체 복사해서 대화창에 붙여넣어도 동일하게 작동한다.
 
 ### Claude Code 사용자
 
