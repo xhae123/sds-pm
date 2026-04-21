@@ -37,13 +37,13 @@ jobs:
       # raw.githubusercontent.com 경로로도 즉시 fetch 되도록 루트에 커밋
       - name: Commit bundle.txt to main
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           cp _site/bundle.txt bundle.txt
-          if git diff --quiet bundle.txt; then
+          git add bundle.txt
+          if git diff --cached --quiet; then
             echo "bundle.txt unchanged — skipping commit"
           else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add bundle.txt
             git commit -m "chore(bundle): auto-update [skip ci]"
             git push
           fi
