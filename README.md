@@ -44,3 +44,28 @@ claude
 ## 업데이트
 
 PM이 주기적으로 push한다. 팀원은 `git pull`로 동기화한다. 새 정보가 생기면 PM에게 공유하면 `/update-context`가 기존 내용과의 충돌·중복·근거 정합성을 점검한 뒤 반영 계획을 제시한다.
+
+---
+
+## 동작 원리
+
+번들은 수동 관리하지 않는다. GitHub Actions가 아래 흐름을 자동화한다.
+
+```
+PM이 CONTEXT.md / MEMORY.md / course/ 수정 → git push
+        │
+        ▼
+  .github/workflows/pages.yml 트리거
+        │
+        ▼
+  scripts/build-bundle.sh 실행
+  여러 파일을 <FILE path="..."> 델리미터로 concat → _site/bundle.txt
+        │
+        ▼
+  actions/upload-pages-artifact → actions/deploy-pages
+        │
+        ▼
+  https://xhae123.github.io/sds-pm/bundle.txt (15초 내 반영)
+```
+
+팀원은 새 챗봇 대화를 열 때마다 이 URL 하나를 던진다. 그 순간의 최신 팀 맥락이 AI 컨텍스트 윈도우로 그대로 들어간다. 레포의 모든 갱신이 별도 조치 없이 전 팀원의 AI에 반영된다.
