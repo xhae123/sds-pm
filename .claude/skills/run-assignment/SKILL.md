@@ -10,6 +10,18 @@ argument-hint: [pdf-path]
 
 ---
 
+## Step 0. INDEX 확인 + 지시서 PDF 보존 (의무)
+
+1. **`assignments/README.md` 인덱스 표를 먼저 본다.** 이 과제가 이미 등록돼 있는지 확인. 있으면 NN을 그대로 사용 (재제출/수정), 없으면 표의 마지막 행 다음 NN을 부여.
+2. **지시서 PDF를 `course_materials/`에 복사 보존:**
+   ```bash
+   cp "$ARGUMENTS" "course_materials/<날짜>_<짧은이름>_안내문.pdf"
+   ```
+   누락 시 차후 "AI가 모르는 과제" 사고가 재발한다 (2026-04-16 도메인 전문가 과제 사례).
+3. `ls course_materials/` 로 다른 과제 지시서·제출본도 함께 살펴 누락이 없는지 점검.
+
+---
+
 ## Step 1. 과제 읽기 & 유형 판별
 
 PDF를 Read 툴로 읽는다. 다음 중 어느 유형인지 판별:
@@ -44,8 +56,10 @@ assignments/NN-<slug>/
 └── final.md      # 최종 제출안 (AI 초안 대비 개선점 섹션 포함)
 ```
 
-`NN`은 다음 번호 (기존 `assignments/` 확인해서 결정).
-`<slug>`는 과제 유형 기반 영문 (예: `04-labeling`, `05-prompt-engineering`).
+`NN`은 Step 0에서 결정된 번호.
+`<slug>`는 과제 유형 기반 영문 (예: `04-labeling`, `06-ux-design`).
+
+**완료 후 의무:** `assignments/README.md` 인덱스 표에 새 행을 추가한다 (NN, 과제명, 일자, 지시서 PDF 경로, 제출본/산출물 경로, 상태). 이 단계를 빠뜨리면 다음 세션의 AI가 이 과제를 모르게 된다.
 
 ---
 

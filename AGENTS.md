@@ -9,6 +9,7 @@
 1. **[`CONTEXT.md`](CONTEXT.md)** — 프로젝트 마스터 문서. 모든 의사결정 근거. 새 제안은 여기에 있는 Section 5 결정과 충돌하지 않아야 한다.
 2. **[`MEMORY.md`](MEMORY.md)** — 축적된 메타 레슨. 과거 과제에서 얻은 교훈.
 3. **[`course/`](course/)** — 수업 프레임워크·과제 포맷·루브릭. 답안 작성 전 필수.
+4. **[`assignments/README.md`](assignments/README.md)** — **모든 과거 과제의 단일 진실 원천 INDEX.** "이 과제 알아?" 질문 또는 새 과제 작업 시 **반드시 이 표를 먼저 본다.** 표에 없는 과제 = 우리가 모르는 과제. course_materials/ 폴더에 지시서·제출본 PDF가 보관됨 — 무엇이 있는지 확인하려면 `ls course_materials/` 부터.
 
 ## 핵심 운영 원칙 (짧게)
 

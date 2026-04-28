@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Zan Sol UX 설계</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+@page { size: A4; margin: 16mm 14mm; }
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Helvetica Neue", sans-serif;
+  font-size: 10.5pt; line-height: 1.6; color: #1a1a1a; max-width: 100%; margin: 0;
+}
+h1 { font-size: 22pt; border-bottom: 3px solid #2c3e50; padding-bottom: 8px; margin: 0 0 4px; color:#2c3e50; }
+h2 { font-size: 15pt; border-bottom: 1.5px solid #34495e; padding-bottom: 4px; margin: 28px 0 10px; color:#34495e; page-break-after: avoid; }
+h3 { font-size: 12.5pt; margin: 18px 0 8px; color:#2c3e50; page-break-after: avoid; }
+h4 { font-size: 11pt; margin: 12px 0 6px; color:#444; }
+p { margin: 6px 0; }
+.meta { color:#666; font-size: 10pt; margin-bottom: 16px; }
+table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 9.5pt; page-break-inside: avoid; }
+th, td { border: 1px solid #bbb; padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: #ecf0f1; font-weight: 600; }
+ul, ol { margin: 4px 0 8px; padding-left: 22px; }
+li { margin: 2px 0; }
+strong { color: #000; }
+hr { border: none; border-top: 1px solid #ddd; margin: 22px 0; }
+.callout { background:#fff8e1; border-left:4px solid #f39c12; padding:8px 12px; margin:10px 0; font-size:10pt; border-radius:3px; }
+.diagram { text-align:center; margin: 14px 0; page-break-inside: avoid; }
+.mermaid { font-size: 12pt; }
+
+.phones { display:flex; flex-wrap:wrap; gap:18px; justify-content:flex-start; margin: 14px 0; }
+.phone-wrap { width: 230px; page-break-inside: avoid; }
+.phone {
+  width: 230px; border: 2px solid #2c3e50; border-radius: 22px;
+  background: #fff; padding: 10px 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-size: 9pt; line-height: 1.45;
+}
+.phone .topbar { display:flex; justify-content:space-between; padding:2px 6px 6px; border-bottom:1px solid #eee; font-weight:600; color:#34495e; }
+.phone .section { padding:7px 6px; border-bottom:1px solid #f0f0f0; }
+.phone .section:last-child { border-bottom: none; }
+.phone .label { color:#7f8c8d; font-size:8pt; margin-bottom:2px; }
+.phone .big-cta { background:#2c3e50; color:#fff; text-align:center; padding:10px; border-radius:8px; font-weight:600; margin:8px 4px; }
+.phone .cta { background:#3498db; color:#fff; text-align:center; padding:7px; border-radius:6px; font-weight:500; margin:5px 2px; font-size:9pt; }
+.phone .ghost { background:#fff; color:#34495e; border:1px solid #bdc3c7; text-align:center; padding:6px; border-radius:6px; margin:5px 2px; font-size:9pt; }
+.phone .timer-big { font-size:24pt; text-align:center; font-weight:700; color:#2c3e50; padding:10px 0 2px; letter-spacing:1px; }
+.phone .timer-label { text-align:center; color:#7f8c8d; font-size:8.5pt; margin-bottom:4px; }
+.phone .row { display:flex; justify-content:space-between; align-items:center; padding:2px 0; }
+.phone .tab { display:flex; justify-content:space-around; font-size:8.5pt; color:#7f8c8d; padding:6px 0 2px; border-top:1px solid #ecf0f1; margin-top:6px; }
+.phone .tab .active { color:#2c3e50; font-weight:700; }
+.phone .small { font-size:8pt; color:#7f8c8d; }
+.phone .todo { padding: 2px 0; }
+.phone .todo .warn { color:#e67e22; font-weight:600; }
+.phone .header { font-weight:700; color:#2c3e50; margin-bottom:4px; }
+.caption { font-size:9pt; color:#555; margin-top:6px; padding-left:4px; }
+.caption strong { color:#2c3e50; }
+
+.overlay { border: 2.5px solid #e74c3c; }
+.overlay.s2 { border-color: #f39c12; }
+.overlay.s3 { border-color: #c0392b; background: #fdedec; }
+.overlay .stage { font-size:8pt; color:#fff; background:#e74c3c; padding:2px 8px; border-radius:10px; display:inline-block; }
+.overlay.s2 .stage { background:#f39c12; }
+.overlay.s3 .stage { background:#c0392b; }
+.overlay .nag-text { font-size:13pt; font-weight:600; text-align:center; padding:14px 4px; color:#2c3e50; line-height:1.4; }
+.overlay .return-cta { background:#27ae60; color:#fff; text-align:center; padding:12px; border-radius:8px; font-weight:700; margin:6px 4px; }
+.overlay .dismiss { text-align:center; color:#95a5a6; font-size:8.5pt; padding:4px; text-decoration:underline; }
+.behind-app { background:#fafafa; padding:6px; border-radius:8px; margin-bottom:8px; font-size:8pt; color:#999; text-align:center; border:1px dashed #ccc; }
+
+.tag { display:inline-block; font-size:8pt; padding:1px 6px; border-radius:8px; margin-left:4px; vertical-align:middle; color:#fff; }
+.tag.p0 { background:#27ae60; }
+.tag.p1 { background:#3498db; }
+.tag.p2 { background:#95a5a6; }
+.tag.sys { background:#e67e22; }
+
+.legend { font-size:9pt; color:#555; margin: 6px 0 10px; }
+.legend .tag { margin-right: 4px; }
+
+.no-break { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<h1>앱·웹 개발 프로젝트를 위한 UX 설계</h1>
+<div class="meta">
+  <strong>프로젝트:</strong> Zan Sol (잔솔) — 집중 세션 중 딴짓을 자동 감지하고, 잔소리로 즉시 개입하는 개인용 자기조절 앱 (Android, V1 = 규칙 기반)<br>
+  <strong>팀:</strong> 김우진(PM) · 유준혁 · 이호준 · 김민성 &nbsp;|&nbsp; <strong>날짜:</strong> 2026-04-28
+</div>
+
+<h2>1. Information Architecture</h2>
+
+<h3>1-1. 주요 사용자 유형</h3>
+<p>V1은 <strong>단일 유형: 개인 사용자(학생 본인)</strong>. 팀/관찰자/관리자 역할 없음.</p>
+
+<h3>1-2. 메뉴 트리</h3>
+
+<div class="legend">
+  <span class="tag p0">P0</span> V1 필수
+  <span class="tag p1">P1</span> V1 확장
+  <span class="tag p2">P2</span> 후순위
+  <span class="tag sys">SYS</span> OS 레이어 위에 표시
+</div>
+
+<div class="diagram no-break">
+<div class="mermaid">
+graph LR
+  ROOT(["Zan Sol"]):::root
+  ROOT --> HOME["홈 [P0]"]:::lvl1
+  ROOT --> SESSION["세션 [P0]"]:::lvl1
+  ROOT --> TODO["할 일 [P0]"]:::lvl1
+  ROOT --> REPORT["리포트 [P1]"]:::lvl1
+  ROOT --> SETTING["설정 [P0]"]:::lvl1
+
+  HOME --> H1["오늘 카드<br/>오늘 TODO · 어제 복귀율"]
+  HOME --> H2["세션 시작 버튼"]
+  HOME --> H3["익명 카운터<br/>'지금 N명 집중 중' [P2]"]:::p2
+
+  SESSION --> S1["세션 진행 화면<br/>경과 시간 · 현재 TODO"]
+  SESSION --> S2["잔소리 오버레이 [SYS]"]:::sys
+  S2 --> S2A["1차 — 행동 제안 (즉시)"]
+  S2 --> S2B["2차 — 공감 + 난이도 낮추기 (30초)"]
+  S2 --> S2C["3차 — 압박 (2분)"]
+
+  TODO --> T1["TODO 목록 (D-N 정렬)"]
+  TODO --> T2["TODO 추가 / 마감 등록"]
+  TODO --> T3["마이크로 태스크 자동 생성"]
+
+  REPORT --> R1["일별 리포트<br/>집중 시간 · 딴짓 시도 · 복귀율"]
+  REPORT --> R2["주별 리포트<br/>단계별 · 문구별 복귀율"]
+
+  SETTING --> ST1["딴짓 앱 등록 / 자동 감지 후보"]
+  SETTING --> ST2["잔소리 강도"]
+  SETTING --> ST3["학기 일정 (사용자 직접)"]
+  SETTING --> ST4["권한 관리<br/>AccessibilityService · OVERLAY"]
+
+  classDef root fill:#2c3e50,color:#fff,stroke:#1a252f,stroke-width:2px
+  classDef lvl1 fill:#3498db,color:#fff,stroke:#2c3e50
+  classDef sys fill:#e67e22,color:#fff,stroke:#a04000
+  classDef p2 fill:#bdc3c7,color:#2c3e50,stroke:#7f8c8d
+</div>
+</div>
+
+<h3>1-3. 설계 의도</h3>
+<ul>
+  <li><strong>홈 → 세션이 1탭</strong> 안에 닿음. 핵심 루프가 가장 짧은 경로.</li>
+  <li>리포트·설정은 보조 메뉴로 분리 (사용 빈도 낮음).</li>
+  <li><strong>잔소리 오버레이는 메뉴 외부에서 트리거</strong>됨 — 시스템 권한(AccessibilityService + SYSTEM_ALERT_WINDOW)으로 다른 앱(인스타·유튜브) 위에 그려진다. 트리상 "세션" 하위지만 실제로는 OS 레이어 위에 떠 있다.</li>
+  <li>비슷한 기능 중복 없음: TODO 등록은 "할 일"에만, 권한 관리는 "설정"에만.</li>
+</ul>
+
+<h2>2. User Flow</h2>
+
+<h3>2-1. 선택한 핵심 사용자 목표</h3>
+<p><strong>"집중 세션을 시작하고, 딴짓을 시도했을 때 잔소리 개입을 받아 원래 세션으로 복귀한다."</strong></p>
+<p>이 목표를 고른 이유: 우리 서비스의 Product Goal("그 순간 즉시 개입하여 복귀") 자체가 이 흐름이다. 다른 후보(온보딩, TODO 등록, 리포트 보기)는 보조 흐름.</p>
+
+<h3>2-2. 흐름도</h3>
+
+<div class="diagram no-break">
+<div class="mermaid">
+flowchart TD
+  A([홈 화면]) --> B[/TODO 선택/]
+  B --> C{Accessibility<br/>권한 있는가?}
+  C -- NO --> C1[권한 안내 화면]:::ex
+  C1 --> C2[설정 이동] --> C
+  C -- YES --> D[세션 진행<br/>경과 시간 시작]
+  D --> E{딴짓 앱 실행?<br/>Reactive &lt; 0.1초<br/>+ 30초 폴링}
+  E -- NO --> Z1([정상 종료]) --> END([세션 완료 리포트])
+  E -- YES --> N1["1차 잔소리<br/>'자료 하나만 찾아봐'"]:::n1
+  N1 --> R1{복귀?}
+  R1 -- 복귀 --> D
+  R1 -- 무시 30초 --> N2["2차 잔소리<br/>'막막하지? 한 줄만'"]:::n2
+  N2 --> R2{복귀?}
+  R2 -- 복귀 --> D
+  R2 -- 무시 2분 --> N3["3차 잔소리<br/>'내일의 너에게 미안'"]:::n3
+  N3 --> R3{복귀?}
+  R3 -- 복귀 --> D
+  R3 -- 끝까지 무시 --> FAIL([세션 실패 리포트]):::ex
+
+  classDef ex fill:#fadbd8,stroke:#c0392b,color:#922b21
+  classDef n1 fill:#fef5e7,stroke:#f39c12
+  classDef n2 fill:#fdebd0,stroke:#e67e22
+  classDef n3 fill:#fadbd8,stroke:#c0392b
+</div>
+</div>
+
+<h3>2-3. 의사결정 지점</h3>
+<ol>
+  <li>AccessibilityService 권한 부여 여부</li>
+  <li>실행 앱이 사용자가 등록한 딴짓 앱 리스트에 있는가</li>
+  <li>1차 잔소리 후 30초 내 복귀했는가</li>
+  <li>2차 잔소리 후 2분 내 복귀했는가</li>
+  <li>3차 잔소리 후에도 무시하는가</li>
+</ol>
+
+<h3>2-4. 예외 상황</h3>
+<ul>
+  <li><strong>예외 1: 권한 미부여</strong> — AccessibilityService 권한이 없으면 핵심 루프 자체가 작동 불가. 첫 세션 시작 시 권한 안내 화면으로 강제 분기.</li>
+  <li><strong>예외 2: 3단계 모두 무시</strong> — 사용자가 끝까지 안 돌아오는 케이스. 세션을 "실패"로 기록하고 리포트에 명시 (다음 세션 설계 입력값).</li>
+</ul>
+
+<h2>3. Wireframe</h2>
+<p class="meta">색·이미지보다 <strong>구조와 정보 배치</strong>에 초점. 7개 핵심 화면.</p>
+
+<div class="phones">
+
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="topbar"><span>Zan Sol</span><span>⚙</span></div>
+    <div class="section">
+      <div class="label">안녕, 우진</div>
+      <div>어제 복귀율 <strong>78%</strong> ↑3%p</div>
+    </div>
+    <div class="section">
+      <div class="header">오늘 할 일</div>
+      <div class="todo"><span class="warn">• 자료조사 보고서 (D-3) ⚠</span></div>
+      <div class="todo">• 발표 슬라이드 초안 (D-7)</div>
+      <div class="ghost">+ 할 일 추가</div>
+    </div>
+    <div class="section">
+      <div class="big-cta">세션 시작 ▶</div>
+    </div>
+    <div class="section small" style="text-align:center">지금 경희대생 142명 집중 중</div>
+    <div class="tab"><span class="active">홈</span><span>세션</span><span>할일</span><span>리포트</span></div>
+  </div>
+  <div class="caption"><strong>① 홈 화면</strong><br>1초 안에 "지금 세션 시작할지" 결정. 세션 시작이 가장 큰 CTA.</div>
+</div>
+
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="topbar"><span>집중 중</span><span></span></div>
+    <div class="section">
+      <div class="timer-big">00:35:24</div>
+      <div class="timer-label">경과 시간 · 목표 시간 없음</div>
+    </div>
+    <div class="section">
+      <div class="header">지금 하고 있는 일</div>
+      <div>▶ 자료조사 보고서</div>
+      <div class="small" style="margin-top:4px">마이크로 태스크<br>"참고 논문 1편만 정리"</div>
+    </div>
+    <div class="section small" style="text-align:center">142명과 함께 집중 중</div>
+    <div class="section"><div class="ghost">세션 종료</div></div>
+  </div>
+  <div class="caption"><strong>② 세션 진행 화면</strong><br>경과 시간만 표시 (목표 시간 X). 핵심 동작은 백그라운드.</div>
+</div>
+
+<div class="phone-wrap">
+  <div class="behind-app">↓ 인스타그램 화면 위 ↓</div>
+  <div class="phone overlay">
+    <div class="topbar"><span>⚡ 잔솔</span><span class="stage">1/3</span></div>
+    <div class="section">
+      <div class="nag-text">"자료 하나만<br>찾아봐"</div>
+    </div>
+    <div class="section small">
+      <div class="label">지금 하던 일</div>
+      참고 논문 1편만 정리
+    </div>
+    <div class="section">
+      <div class="return-cta">돌아가기 (집중 모드)</div>
+      <div class="dismiss">5초 후 잠깐 닫기</div>
+    </div>
+  </div>
+  <div class="caption"><strong>③ 잔소리 오버레이 — 1차</strong><br>OS 레이어 위. 행동 제안. <em>닫기 가능.</em></div>
+</div>
+
+<div class="phone-wrap">
+  <div class="behind-app">↓ 인스타그램 화면 위 ↓</div>
+  <div class="phone overlay s2">
+    <div class="topbar"><span>⚡ 잔솔</span><span class="stage">2/3</span></div>
+    <div class="section">
+      <div class="nag-text">"막막하지?<br>한 줄만 써봐"</div>
+    </div>
+    <div class="section small">
+      <div class="label">지금 하던 일</div>
+      참고 논문 1편만 정리
+    </div>
+    <div class="section">
+      <div class="return-cta">돌아가기</div>
+      <div class="dismiss">5초 후 잠깐 닫기</div>
+    </div>
+  </div>
+  <div class="caption"><strong>④ 잔소리 오버레이 — 2차 (30초)</strong><br>공감 + 난이도 낮추기. 자기효능감(Bandura). <em>닫기 가능.</em></div>
+</div>
+
+<div class="phone-wrap">
+  <div class="behind-app">↓ 인스타그램 화면 위 ↓</div>
+  <div class="phone overlay s3">
+    <div class="topbar"><span>⚡ 잔솔</span><span class="stage">3/3</span></div>
+    <div class="section">
+      <div class="nag-text">"내일의 너한테<br>미안하지 않을까?"</div>
+    </div>
+    <div class="section small">
+      <div class="label">지금 하던 일</div>
+      참고 논문 1편만 정리
+    </div>
+    <div class="section">
+      <div class="return-cta">돌아가기</div>
+      <div class="dismiss" style="color:#c0392b">그래도 무시</div>
+    </div>
+  </div>
+  <div class="caption"><strong>⑤ 잔소리 오버레이 — 3차 (2분)</strong><br>압박. <strong>닫기 제거</strong> — 명시적 "그래도 무시"만. Reactance.</div>
+</div>
+
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="topbar"><span>세션 완료</span><span></span></div>
+    <div class="section" style="text-align:center">
+      <div style="font-size:18pt; font-weight:700; color:#27ae60">54분 집중</div>
+      <div class="small">오늘 누적 1시간 42분</div>
+    </div>
+    <div class="section">
+      <div class="header">딴짓 시도 4회</div>
+      <div class="small">• 1차에서 복귀 3회 ✓</div>
+      <div class="small">• 2차에서 복귀 1회 ✓</div>
+      <div class="small">• 3차까지 간 경우 0회</div>
+      <div style="margin-top:4px"><strong>복귀율 100%</strong> <span class="small">(지난 주 81%)</span></div>
+    </div>
+    <div class="section">
+      <div class="label">다음에 할 일 (D-3)</div>
+      ▶ 자료조사 보고서
+    </div>
+    <div class="section">
+      <div class="cta">다음 세션 시작</div>
+      <div class="ghost">홈으로</div>
+    </div>
+  </div>
+  <div class="caption"><strong>⑥ 세션 완료 리포트</strong><br>목표 시간 없음 → 누적 집중 시간 + 복귀율이 핵심.</div>
+</div>
+
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="topbar"><span>← 딴짓 앱 관리</span><span></span></div>
+    <div class="section">
+      <div class="header">등록된 앱 (5)</div>
+      <div class="row"><span>☑ Instagram</span><span class="small">삭제</span></div>
+      <div class="row"><span>☑ YouTube</span><span class="small">삭제</span></div>
+      <div class="row"><span>☑ TikTok</span><span class="small">삭제</span></div>
+      <div class="row"><span>☑ Twitter</span><span class="small">삭제</span></div>
+      <div class="row"><span>☑ Reddit</span><span class="small">삭제</span></div>
+    </div>
+    <div class="section">
+      <div class="header">자동 감지 후보</div>
+      <div class="small">Threads (10분+ 체류 3회)</div>
+      <div class="cta">딴짓 앱으로 등록</div>
+    </div>
+    <div class="ghost">+ 직접 추가</div>
+  </div>
+  <div class="caption"><strong>⑦ 딴짓 앱 관리 (설정)</strong><br>사용자 주도 freshness 유지.</div>
+</div>
+
+</div>
+
+<h2>4. Wire Flow</h2>
+
+<div class="diagram no-break">
+<div class="mermaid">
+flowchart TD
+  HOME([홈]) -->|세션 시작| TODO[TODO 선택]
+  TODO --> SESS[세션 진행]
+  HOME -->|+ 할 일| TODOPAGE[할 일 화면]
+  HOME -->|⚙ 설정| SETUP[설정 → 딴짓 앱 관리]
+  HOME -->|리포트 탭| REP[리포트 화면]
+
+  SESS -->|정상 종료| DONE([세션 완료 리포트])
+  SESS -->|딴짓 감지| N1[잔소리 1차]:::n1
+  N1 -->|돌아가기| SESS
+  N1 -->|무시 30초| N2[잔소리 2차]:::n2
+  N2 -->|돌아가기| SESS
+  N2 -->|무시 2분| N3[잔소리 3차]:::n3
+  N3 -->|돌아가기| SESS
+  N3 -->|끝까지 무시| FAIL([세션 완료 - 실패]):::ex
+
+  DONE -->|다음 세션| TODO
+  DONE -->|홈으로| HOME
+
+  classDef n1 fill:#fef5e7,stroke:#f39c12
+  classDef n2 fill:#fdebd0,stroke:#e67e22
+  classDef n3 fill:#fadbd8,stroke:#c0392b
+  classDef ex fill:#fadbd8,stroke:#c0392b
+</div>
+</div>
+
+<div class="callout">
+<strong>Wire Flow 점검</strong>
+<ul style="margin:4px 0">
+<li>화면 간 이동 자연스러움: 핵심 루프가 1탭 깊이.</li>
+<li>다음 행동 제시: 모든 종료 화면(리포트)에 [다음 세션] CTA.</li>
+<li>불필요 이동 없음: 세션 진행 중 잔소리는 별도 화면이 아니라 시스템 오버레이.</li>
+<li>예외 처리: 권한 미부여 → 설정 분기 / 끝까지 무시 → 실패 리포트.</li>
+</ul>
+</div>
+
+<h2>5. 설명 문서</h2>
+
+<ol>
+  <li><strong>핵심 사용자</strong>는 관찰자 없이 혼자 공부하다가 스마트폰으로 도피하는 경희대 대학생이며, 자체 서베이(n=34)에서 도피 경험 85.3%로 문제가 충분히 크다.</li>
+  <li><strong>핵심 문제</strong>는 도피 "그 순간"에 개입할 수단이 없다는 것이다 — 기존 앱(스크린타임은 사후 리포트, Forest는 의지 전제)은 이 순간을 비워둔다.</li>
+  <li><strong>IA</strong>는 "홈 → 세션"이 1탭 안에 닿도록 핵심 루프를 가장 짧은 경로로 배치하고, 리포트·설정은 보조 메뉴로 분리하여 사용자가 매번 의식적으로 찾을 필요가 없게 했다.</li>
+  <li><strong>User Flow</strong>에서 가장 중요하게 고려한 행동은 "딴짓 앱 실행 → 1차/2차/3차 잔소리 → 복귀"의 단일 핵심 루프이며, 세 번의 의사결정 지점(각 단계 무시 여부)이 우리의 Primary Metric인 복귀율의 직접 입력값이 된다.</li>
+  <li><strong>Wireframe</strong>에서 가장 중요하게 배치한 것은 잔소리 오버레이의 <strong>[돌아가기] 버튼을 가장 큰 CTA</strong>로 두고 1·2차에는 닫기를 두되 3차에는 닫기를 제거한 것이다 — 이는 행동활성화 → 자기효능감(Bandura) → 심리적 저항 회피(Reactance)의 단계별 심리 메커니즘을 화면 구조로 옮긴 것이다.</li>
+  <li>이 설계는 개발 전에 <strong>핵심 루프가 디바이스 로컬에서 완결</strong>됨을 시각적으로 확인시켜 주고(네트워크 지연이 Product Goal에 영향 없음), 4인 팀이 16주 안에 어떤 화면을 누가 만들지 분담 기준을 제공한다.</li>
+</ol>
+
+<script>
+mermaid.initialize({ startOnLoad: true, theme: 'default', flowchart: { htmlLabels: true, curve: 'basis' } });
+</script>
+</body>
+</html>
